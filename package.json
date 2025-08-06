@@ -1,0 +1,20 @@
+{
+  "name": "project-dashboard",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["dashboard", "project-management", "web-app", "express"],
+  "author": "",
+  "license": "ISC",
+  "description": "A web-based project dashboard for managing and tracking projects",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
