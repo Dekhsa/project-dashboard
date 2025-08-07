@@ -1,6 +1,6 @@
-import React from 'react';
-import { Project } from '../../types';
-import ProjectCard from './ProjectCard';
+import React from "react";
+import { Project } from "../../types";
+import ProjectCard from "./ProjectCard";
 
 interface ProjectGridProps {
   projects: Project[];
@@ -8,7 +8,11 @@ interface ProjectGridProps {
   onDelete: (id: string) => void;
 }
 
-const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, onEdit, onDelete }) => {
+const ProjectGrid: React.FC<ProjectGridProps> = ({
+  projects,
+  onEdit,
+  onDelete,
+}) => {
   if (projects.length === 0) {
     return (
       <div className="text-center py-12">
@@ -27,8 +31,12 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, onEdit, onDelete })
             />
           </svg>
         </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">No projects found</h3>
-        <p className="text-gray-500">Get started by creating your first project.</p>
+        <h3 className="text-lg font-medium text-gray-900 mb-2">
+          No projects found
+        </h3>
+        <p className="text-gray-500">
+          Get started by creating your first project.
+        </p>
       </div>
     );
   }

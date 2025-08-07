@@ -32,6 +32,7 @@ Setiap halaman dibagi menjadi komponen-komponen kecil yang dapat digunakan kemba
 ## Tech Stack
 
 ### Frontend
+
 - **React 18** - Frontend framework
 - **TypeScript** - Type safety
 - **TailwindCSS** - Utility-first CSS framework
@@ -39,6 +40,7 @@ Setiap halaman dibagi menjadi komponen-komponen kecil yang dapat digunakan kemba
 - **Lucide React** - Modern icon library
 
 ### Backend
+
 - **Node.js** - Runtime environment
 - **Express.js** - Web framework
 - **CORS** - Cross-origin resource sharing
@@ -144,19 +146,23 @@ npm start
 ## API Endpoints
 
 ### Projects
+
 - `GET /api/projects` - Get all projects
 - `POST /api/projects` - Create new project
 - `PUT /api/projects/:id` - Update project
 - `DELETE /api/projects/:id` - Delete project
 
 ### Blog
+
 - `GET /api/blog` - Get all blog posts
 - `POST /api/blog` - Create new blog post
 
 ### Stats
+
 - `GET /api/stats` - Get dashboard statistics
 
 ### Health
+
 - `GET /api/health` - Health check endpoint
 
 ## Komponen Detail
@@ -215,7 +221,7 @@ Semua komponen dibuat modular dan reusable. Anda dapat dengan mudah:
 Project ini sudah dilengkapi dengan REST API backend. Untuk menggunakan API di frontend:
 
 ```typescript
-import { projectAPI, blogAPI, statsAPI } from './utils/api';
+import { projectAPI, blogAPI, statsAPI } from "./utils/api";
 
 // Get all projects
 const projects = await projectAPI.getAll();
@@ -226,7 +232,7 @@ const newProject = await projectAPI.create({
   description: "Project description",
   status: "active",
   technologies: ["React", "Node.js"],
-  progress: 50
+  progress: 50,
 });
 
 // Get dashboard stats

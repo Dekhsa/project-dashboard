@@ -1,15 +1,20 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './components/Login';
-import Dashboard from './views/Dashboard';
-import Projects from './views/Projects';
-import Blog from './views/Blog';
-import Experience from './views/Experience';
-import './index.css';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Login from "./components/Login";
+import Dashboard from "./views/Dashboard";
+import Projects from "./views/Projects";
+import Blog from "./views/Blog";
+import Experience from "./views/Experience";
+import "./index.css";
 
 function App() {
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <div className="App">
         <Routes>
           <Route path="/login" element={<Login />} />

@@ -1,6 +1,6 @@
-import React from 'react';
-import { Edit, Trash2, Eye, Calendar, Tag } from 'lucide-react';
-import { BlogPost } from '../../types';
+import React from "react";
+import { Edit, Trash2, Eye, Calendar, Tag } from "lucide-react";
+import { BlogPost } from "../../types";
 
 interface BlogCardProps {
   post: BlogPost;
@@ -9,28 +9,39 @@ interface BlogCardProps {
   onTogglePublish: (id: string) => void;
 }
 
-const BlogCard: React.FC<BlogCardProps> = ({ post, onEdit, onDelete, onTogglePublish }) => {
+const BlogCard: React.FC<BlogCardProps> = ({
+  post,
+  onEdit,
+  onDelete,
+  onTogglePublish,
+}) => {
   const getStatusColor = (published: boolean) => {
-    return published 
-      ? 'bg-green-100 text-green-800' 
-      : 'bg-yellow-100 text-yellow-800';
+    return published
+      ? "bg-green-100 text-green-800"
+      : "bg-yellow-100 text-yellow-800";
   };
 
   const getStatusText = (published: boolean) => {
-    return published ? 'Published' : 'Draft';
+    return published ? "Published" : "Draft";
   };
 
   return (
     <div className="bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow">
       <div className="flex justify-between items-start mb-3">
-        <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">{post.title}</h3>
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(post.published)}`}>
+        <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
+          {post.title}
+        </h3>
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
+            post.published
+          )}`}
+        >
           {getStatusText(post.published)}
         </span>
       </div>
-      
+
       <p className="text-gray-600 text-sm mb-4 line-clamp-3">{post.excerpt}</p>
-      
+
       {/* Tags */}
       <div className="mb-4">
         <div className="flex items-center space-x-1 mb-2">
@@ -53,7 +64,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, onEdit, onDelete, onTogglePub
           )}
         </div>
       </div>
-      
+
       {/* Meta information */}
       <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
         <div className="flex items-center space-x-1">
@@ -62,7 +73,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, onEdit, onDelete, onTogglePub
         </div>
         <span>By {post.author}</span>
       </div>
-      
+
       {/* Actions */}
       <div className="flex justify-between items-center">
         <div className="flex space-x-2">
@@ -77,10 +88,10 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, onEdit, onDelete, onTogglePub
             onClick={() => onTogglePublish(post.id)}
             className={`p-2 rounded-lg transition-colors ${
               post.published
-                ? 'text-gray-400 hover:text-yellow-600 hover:bg-yellow-50'
-                : 'text-gray-400 hover:text-green-600 hover:bg-green-50'
+                ? "text-gray-400 hover:text-yellow-600 hover:bg-yellow-50"
+                : "text-gray-400 hover:text-green-600 hover:bg-green-50"
             }`}
-            aria-label={post.published ? 'Unpublish post' : 'Publish post'}
+            aria-label={post.published ? "Unpublish post" : "Publish post"}
           >
             <Eye className="w-4 h-4" />
           </button>

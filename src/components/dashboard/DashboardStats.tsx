@@ -1,7 +1,7 @@
-import React from 'react';
-import StatCard from '../StatCard';
-import { Users, FolderOpen, FileText, TrendingUp } from 'lucide-react';
-import { DashboardStats as StatsType } from '../../types';
+import React from "react";
+import StatCard from "../StatCard";
+import { Users, FolderOpen, FileText, TrendingUp } from "lucide-react";
+import { DashboardStats as StatsType } from "../../types";
 
 interface DashboardStatsProps {
   stats: StatsType;
@@ -50,7 +50,7 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({ stats }) => {
           color={stat.color}
           trend={{
             value: stat.change,
-            isPositive: stat.change > 0
+            isPositive: stat.change > 0,
           }}
         />
       ))}

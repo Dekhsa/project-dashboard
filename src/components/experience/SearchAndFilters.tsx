@@ -1,8 +1,8 @@
-import React from 'react';
-import { Search, Filter } from 'lucide-react';
+import React from "react";
+import { Search, Filter } from "lucide-react";
 
 interface SearchAndFiltersProps {
-  activeTab: 'experience' | 'skills' | 'achievements';
+  activeTab: "experience" | "skills" | "achievements";
   searchTerm: string;
   onSearchChange: (value: string) => void;
   filterCategory: string;
@@ -14,7 +14,7 @@ const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
   searchTerm,
   onSearchChange,
   filterCategory,
-  onFilterChange
+  onFilterChange,
 }) => {
   return (
     <div className="flex space-x-4">
@@ -29,8 +29,8 @@ const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
           aria-label={`Search ${activeTab}`}
         />
       </div>
-      
-      {(activeTab === 'skills' || activeTab === 'achievements') && (
+
+      {(activeTab === "skills" || activeTab === "achievements") && (
         <div className="relative">
           <Filter className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <select
@@ -40,7 +40,7 @@ const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
             aria-label="Filter by category"
           >
             <option value="all">All Categories</option>
-            {activeTab === 'skills' ? (
+            {activeTab === "skills" ? (
               <>
                 <option value="frontend">Frontend</option>
                 <option value="backend">Backend</option>

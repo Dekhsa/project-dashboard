@@ -1,6 +1,6 @@
-import React from 'react';
-import { Edit2, Trash2, MapPin, Calendar, Building2 } from 'lucide-react';
-import { Experience } from '../../types';
+import React from "react";
+import { Edit2, Trash2, MapPin, Calendar, Building2 } from "lucide-react";
+import { Experience } from "../../types";
 
 interface ExperienceCardProps {
   experience: Experience;
@@ -8,13 +8,21 @@ interface ExperienceCardProps {
   onDelete: (id: string) => void;
 }
 
-const ExperienceCard: React.FC<ExperienceCardProps> = ({ experience, onEdit, onDelete }) => {
+const ExperienceCard: React.FC<ExperienceCardProps> = ({
+  experience,
+  onEdit,
+  onDelete,
+}) => {
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'work': return 'bg-green-100 text-green-800';
-      case 'internship': return 'bg-blue-100 text-blue-800';
-      case 'freelance': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case "work":
+        return "bg-green-100 text-green-800";
+      case "internship":
+        return "bg-blue-100 text-blue-800";
+      case "freelance":
+        return "bg-purple-100 text-purple-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -23,8 +31,14 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({ experience, onEdit, onD
       <div className="flex justify-between items-start">
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-2">
-            <h3 className="text-lg font-semibold text-gray-900">{experience.position}</h3>
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTypeColor(experience.type)}`}>
+            <h3 className="text-lg font-semibold text-gray-900">
+              {experience.position}
+            </h3>
+            <span
+              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTypeColor(
+                experience.type
+              )}`}
+            >
               {experience.type}
             </span>
           </div>
@@ -41,7 +55,8 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({ experience, onEdit, onD
           <div className="flex items-center text-gray-500 mb-3">
             <Calendar className="w-4 h-4 mr-1" />
             <span>
-              {experience.startDate} - {experience.current ? 'Present' : experience.endDate}
+              {experience.startDate} -{" "}
+              {experience.current ? "Present" : experience.endDate}
             </span>
           </div>
           <p className="text-gray-700 mb-3">{experience.description}</p>

@@ -27,7 +27,7 @@ const StatCard: React.FC<StatCardProps> = ({
     purple: 'bg-purple-500 text-purple-600 bg-purple-50',
   };
 
-  const [bgColor, textColor, bgLight] = colorClasses[color].split(' ');
+  const [, textColor, bgLight] = colorClasses[color].split(' ');
 
   return (
     <div className="bg-white rounded-lg shadow-sm border p-6">

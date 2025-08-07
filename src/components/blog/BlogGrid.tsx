@@ -1,6 +1,6 @@
-import React from 'react';
-import { BlogPost } from '../../types';
-import BlogCard from './BlogCard';
+import React from "react";
+import { BlogPost } from "../../types";
+import BlogCard from "./BlogCard";
 
 interface BlogGridProps {
   posts: BlogPost[];
@@ -9,7 +9,12 @@ interface BlogGridProps {
   onTogglePublish: (id: string) => void;
 }
 
-const BlogGrid: React.FC<BlogGridProps> = ({ posts, onEdit, onDelete, onTogglePublish }) => {
+const BlogGrid: React.FC<BlogGridProps> = ({
+  posts,
+  onEdit,
+  onDelete,
+  onTogglePublish,
+}) => {
   if (posts.length === 0) {
     return (
       <div className="text-center py-12">
@@ -28,8 +33,12 @@ const BlogGrid: React.FC<BlogGridProps> = ({ posts, onEdit, onDelete, onTogglePu
             />
           </svg>
         </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">No blog posts found</h3>
-        <p className="text-gray-500">Start writing your first blog post to share your thoughts.</p>
+        <h3 className="text-lg font-medium text-gray-900 mb-2">
+          No blog posts found
+        </h3>
+        <p className="text-gray-500">
+          Start writing your first blog post to share your thoughts.
+        </p>
       </div>
     );
   }

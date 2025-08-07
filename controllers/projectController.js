@@ -1,18 +1,30 @@
-// Project Controller
+// Project Controller with Firebase Realtime Database
+const { db } = require('../config/firebase');
+
 const projectController = {
   // Get all projects
   getAllProjects: async (req, res) => {
     try {
-      // This would typically fetch from database
-      // For now, using mock data from index.js
+      const projectsRef = db.ref('projects');
+      const snapshot = await projectsRef.once('value');
+      const projects = [];
+      
+      snapshot.forEach((childSnapshot) => {
+        projects.push({
+          id: childSnapshot.key,
+          ...childSnapshot.val()
+        });
+      });
+
       res.json({
         success: true,
-        message: "Projects fetched successfully"
+        message: "Projects fetched successfully",
+        data: projects
       });
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   },
@@ -20,25 +32,35 @@ const projectController = {
   // Create new project
   createProject: async (req, res) => {
     try {
-      const { title, description, status, technologies, progress } = req.body;
-      
-      // Validation
-      if (!title || !description) {
-        return res.status(400).json({
-          success: false,
-          message: "Title and description are required"
-        });
-      }
+      const { title, description, status = 'active', technologies = [], progress = 0 } = req.body;
 
-      // This would typically save to database
+      // Validation already handled by middleware
+      const newProject = {
+        title,
+        description,
+        status,
+        technologies,
+        progress,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      // Save to Firebase
+      const projectsRef = db.ref('projects');
+      const newProjectRef = await projectsRef.push(newProject);
+
       res.status(201).json({
         success: true,
-        message: "Project created successfully"
+        message: "Project created successfully",
+        data: {
+          id: newProjectRef.key,
+          ...newProject
+        }
       });
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   },
@@ -47,15 +69,24 @@ const projectController = {
   updateProject: async (req, res) => {
     try {
       const { id } = req.params;
-      // This would typically update in database
+      const updates = {
+        ...req.body,
+        updatedAt: new Date().toISOString()
+      };
+
+      // Update in Firebase
+      const projectRef = db.ref(`projects/${id}`);
+      await projectRef.update(updates);
+
       res.json({
         success: true,
-        message: "Project updated successfully"
+        message: "Project updated successfully",
+        data: { id, ...updates }
       });
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   },
@@ -64,18 +95,22 @@ const projectController = {
   deleteProject: async (req, res) => {
     try {
       const { id } = req.params;
-      // This would typically delete from database
+      
+      // Delete from Firebase
+      const projectRef = db.ref(`projects/${id}`);
+      await projectRef.remove();
+
       res.json({
         success: true,
-        message: "Project deleted successfully"
+        message: "Project deleted successfully",
       });
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
-  }
+  },
 };
 
 module.exports = projectController;

@@ -1,6 +1,6 @@
-import React from 'react';
-import { X } from 'lucide-react';
-import { Project } from '../../types';
+import React from "react";
+import { X } from "lucide-react";
+import { Project } from "../../types";
 
 interface ProjectModalProps {
   isOpen: boolean;
@@ -9,17 +9,19 @@ interface ProjectModalProps {
   formData: {
     title: string;
     description: string;
-    status: Project['status'];
+    status: Project["status"];
     technologies: string;
     progress: number;
   };
-  setFormData: React.Dispatch<React.SetStateAction<{
-    title: string;
-    description: string;
-    status: Project['status'];
-    technologies: string;
-    progress: number;
-  }>>;
+  setFormData: React.Dispatch<
+    React.SetStateAction<{
+      title: string;
+      description: string;
+      status: Project["status"];
+      technologies: string;
+      progress: number;
+    }>
+  >;
   editingProject: Project | null;
 }
 
@@ -29,7 +31,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
   onSubmit,
   formData,
   setFormData,
-  editingProject
+  editingProject,
 }) => {
   if (!isOpen) return null;
 
@@ -38,7 +40,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
       <div className="bg-white rounded-lg w-full max-w-md">
         <div className="flex justify-between items-center p-6 border-b">
           <h2 className="text-xl font-semibold">
-            {editingProject ? 'Edit Project' : 'Create New Project'}
+            {editingProject ? "Edit Project" : "Create New Project"}
           </h2>
           <button
             onClick={onClose}
@@ -59,7 +61,9 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, title: e.target.value })
+              }
               placeholder="Enter project title"
               aria-label="Project title"
             />
@@ -74,7 +78,9 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
               placeholder="Enter project description"
               aria-label="Project description"
             />
@@ -87,7 +93,12 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
             <select
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={formData.status}
-              onChange={(e) => setFormData({ ...formData, status: e.target.value as Project['status'] })}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  status: e.target.value as Project["status"],
+                })
+              }
               aria-label="Project status"
             >
               <option value="active">Active</option>
@@ -104,7 +115,9 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
               type="text"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={formData.technologies}
-              onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, technologies: e.target.value })
+              }
               placeholder="React, Node.js, MongoDB"
               aria-label="Technologies used"
             />
@@ -120,7 +133,9 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
               max="100"
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
               value={formData.progress}
-              onChange={(e) => setFormData({ ...formData, progress: parseInt(e.target.value) })}
+              onChange={(e) =>
+                setFormData({ ...formData, progress: parseInt(e.target.value) })
+              }
               aria-label="Project progress"
             />
             <div className="flex justify-between text-xs text-gray-500 mt-1">
@@ -142,7 +157,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
               type="submit"
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              {editingProject ? 'Update' : 'Create'} Project
+              {editingProject ? "Update" : "Create"} Project
             </button>
           </div>
         </form>

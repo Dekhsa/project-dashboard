@@ -1,6 +1,6 @@
-import React from 'react';
-import { Edit, Trash2, Eye, Calendar } from 'lucide-react';
-import { Project } from '../../types';
+import React from "react";
+import { Edit, Trash2, Eye, Calendar } from "lucide-react";
+import { Project } from "../../types";
 
 interface ProjectCardProps {
   project: Project;
@@ -8,47 +8,67 @@ interface ProjectCardProps {
   onDelete: (id: string) => void;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDelete }) => {
-  const getStatusColor = (status: Project['status']) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({
+  project,
+  onEdit,
+  onDelete,
+}) => {
+  const getStatusColor = (status: Project["status"]) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'completed': return 'bg-blue-100 text-blue-800';
-      case 'paused': return 'bg-yellow-100 text-yellow-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case "active":
+        return "bg-green-100 text-green-800";
+      case "completed":
+        return "bg-blue-100 text-blue-800";
+      case "paused":
+        return "bg-yellow-100 text-yellow-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const getProgressColor = (progress: number) => {
-    if (progress >= 80) return 'bg-green-500';
-    if (progress >= 50) return 'bg-yellow-500';
-    return 'bg-blue-500';
+    if (progress >= 80) return "bg-green-500";
+    if (progress >= 50) return "bg-yellow-500";
+    return "bg-blue-500";
   };
 
   return (
     <div className="bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow">
       <div className="flex justify-between items-start mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">{project.title}</h3>
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(project.status)}`}>
+        <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">
+          {project.title}
+        </h3>
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
+            project.status
+          )}`}
+        >
           {project.status}
         </span>
       </div>
-      
-      <p className="text-gray-600 text-sm mb-4 line-clamp-2">{project.description}</p>
-      
+
+      <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+        {project.description}
+      </p>
+
       {/* Progress Bar */}
       <div className="mb-4">
         <div className="flex justify-between items-center mb-1">
           <span className="text-xs font-medium text-gray-700">Progress</span>
-          <span className="text-xs font-medium text-gray-900">{project.progress}%</span>
+          <span className="text-xs font-medium text-gray-900">
+            {project.progress}%
+          </span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
-          <div 
-            className={`h-2 rounded-full transition-all duration-300 ${getProgressColor(project.progress)}`}
+          <div
+            className={`h-2 rounded-full transition-all duration-300 ${getProgressColor(
+              project.progress
+            )}`}
             style={{ width: `${project.progress}%` }}
           />
         </div>
       </div>
-      
+
       {/* Technologies */}
       <div className="mb-4">
         <div className="flex flex-wrap gap-1">
@@ -67,13 +87,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDelete }) 
           )}
         </div>
       </div>
-      
+
       {/* Dates */}
       <div className="flex items-center text-xs text-gray-500 mb-4">
         <Calendar className="w-3 h-3 mr-1" />
         <span>Created: {new Date(project.createdAt).toLocaleDateString()}</span>
       </div>
-      
+
       {/* Actions */}
       <div className="flex justify-between items-center">
         <div className="flex space-x-2">

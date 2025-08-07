@@ -1,6 +1,13 @@
-import React from 'react';
-import { Edit2, Trash2, Star, Building2, Calendar, ExternalLink } from 'lucide-react';
-import { Achievement } from '../../types';
+import React from "react";
+import {
+  Edit2,
+  Trash2,
+  Star,
+  Building2,
+  Calendar,
+  ExternalLink,
+} from "lucide-react";
+import { Achievement } from "../../types";
 
 interface AchievementCardProps {
   achievement: Achievement;
@@ -8,15 +15,25 @@ interface AchievementCardProps {
   onDelete: (id: string) => void;
 }
 
-const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, onEdit, onDelete }) => {
+const AchievementCard: React.FC<AchievementCardProps> = ({
+  achievement,
+  onEdit,
+  onDelete,
+}) => {
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'certification': return 'bg-green-100 text-green-800';
-      case 'award': return 'bg-yellow-100 text-yellow-800';
-      case 'project': return 'bg-blue-100 text-blue-800';
-      case 'recognition': return 'bg-purple-100 text-purple-800';
-      case 'education': return 'bg-indigo-100 text-indigo-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case "certification":
+        return "bg-green-100 text-green-800";
+      case "award":
+        return "bg-yellow-100 text-yellow-800";
+      case "project":
+        return "bg-blue-100 text-blue-800";
+      case "recognition":
+        return "bg-purple-100 text-purple-800";
+      case "education":
+        return "bg-indigo-100 text-indigo-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -25,12 +42,14 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, onEdit, 
       <div className="flex justify-between items-start">
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-2">
-            <h3 className="text-lg font-semibold text-gray-900">{achievement.title}</h3>
+            <h3 className="text-lg font-semibold text-gray-900">
+              {achievement.title}
+            </h3>
             {achievement.featured && (
               <Star className="w-5 h-5 text-yellow-500 fill-current" />
             )}
           </div>
-          
+
           <div className="flex items-center text-gray-600 mb-2">
             {achievement.issuer && (
               <>
@@ -39,22 +58,31 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, onEdit, 
               </>
             )}
             <Calendar className="w-4 h-4 mr-1" />
-            <span>{new Date(achievement.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</span>
+            <span>
+              {new Date(achievement.date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+              })}
+            </span>
           </div>
-          
+
           <p className="text-gray-700 mb-3">{achievement.description}</p>
-          
+
           <div className="flex items-center space-x-4 mb-3">
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCategoryColor(achievement.category)}`}>
+            <span
+              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCategoryColor(
+                achievement.category
+              )}`}
+            >
               {achievement.category}
             </span>
-            
+
             {achievement.credentialId && (
               <span className="text-sm text-gray-500">
                 ID: {achievement.credentialId}
               </span>
             )}
-            
+
             {achievement.credentialUrl && (
               <a
                 href={achievement.credentialUrl}
@@ -67,7 +95,7 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, onEdit, 
               </a>
             )}
           </div>
-          
+
           {achievement.skills && achievement.skills.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {achievement.skills.map((skill, index) => (
@@ -81,7 +109,7 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, onEdit, 
             </div>
           )}
         </div>
-        
+
         <div className="flex space-x-2 ml-4">
           <button
             onClick={() => onEdit(achievement)}

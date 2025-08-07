@@ -1,6 +1,6 @@
-import React from 'react';
-import { X } from 'lucide-react';
-import { BlogPost } from '../../types';
+import React from "react";
+import { X } from "lucide-react";
+import { BlogPost } from "../../types";
 
 interface BlogModalProps {
   isOpen: boolean;
@@ -10,16 +10,20 @@ interface BlogModalProps {
     title: string;
     content: string;
     excerpt: string;
+    author: string;
     tags: string;
     published: boolean;
   };
-  setFormData: React.Dispatch<React.SetStateAction<{
-    title: string;
-    content: string;
-    excerpt: string;
-    tags: string;
-    published: boolean;
-  }>>;
+  setFormData: React.Dispatch<
+    React.SetStateAction<{
+      title: string;
+      content: string;
+      excerpt: string;
+      author: string;
+      tags: string;
+      published: boolean;
+    }>
+  >;
   editingPost: BlogPost | null;
 }
 
@@ -29,7 +33,7 @@ const BlogModal: React.FC<BlogModalProps> = ({
   onSubmit,
   formData,
   setFormData,
-  editingPost
+  editingPost,
 }) => {
   if (!isOpen) return null;
 
@@ -38,7 +42,7 @@ const BlogModal: React.FC<BlogModalProps> = ({
       <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center p-6 border-b">
           <h2 className="text-xl font-semibold">
-            {editingPost ? 'Edit Blog Post' : 'Create New Blog Post'}
+            {editingPost ? "Edit Blog Post" : "Create New Blog Post"}
           </h2>
           <button
             onClick={onClose}
@@ -59,7 +63,9 @@ const BlogModal: React.FC<BlogModalProps> = ({
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, title: e.target.value })
+              }
               placeholder="Enter blog post title"
               aria-label="Blog post title"
             />
@@ -74,7 +80,9 @@ const BlogModal: React.FC<BlogModalProps> = ({
               rows={2}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={formData.excerpt}
-              onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, excerpt: e.target.value })
+              }
               placeholder="Enter a brief excerpt or summary"
               aria-label="Blog post excerpt"
             />
@@ -89,9 +97,28 @@ const BlogModal: React.FC<BlogModalProps> = ({
               rows={8}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, content: e.target.value })
+              }
               placeholder="Write your blog post content..."
               aria-label="Blog post content"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Author
+            </label>
+            <input
+              type="text"
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              value={formData.author}
+              onChange={(e) =>
+                setFormData({ ...formData, author: e.target.value })
+              }
+              placeholder="Author name"
+              aria-label="Blog post author"
             />
           </div>
 
@@ -103,7 +130,9 @@ const BlogModal: React.FC<BlogModalProps> = ({
               type="text"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={formData.tags}
-              onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, tags: e.target.value })
+              }
               placeholder="React, JavaScript, Tutorial"
               aria-label="Blog post tags"
             />
@@ -115,7 +144,9 @@ const BlogModal: React.FC<BlogModalProps> = ({
               id="published"
               className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
               checked={formData.published}
-              onChange={(e) => setFormData({ ...formData, published: e.target.checked })}
+              onChange={(e) =>
+                setFormData({ ...formData, published: e.target.checked })
+              }
             />
             <label htmlFor="published" className="ml-2 text-sm text-gray-700">
               Publish immediately
@@ -134,7 +165,7 @@ const BlogModal: React.FC<BlogModalProps> = ({
               type="submit"
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              {editingPost ? 'Update' : 'Create'} Post
+              {editingPost ? "Update" : "Create"} Post
             </button>
           </div>
         </form>

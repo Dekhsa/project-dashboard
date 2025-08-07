@@ -1,16 +1,19 @@
-import React from 'react';
-import { Building2, Code, Trophy } from 'lucide-react';
+import React from "react";
+import { Building2, Code, Trophy } from "lucide-react";
 
 interface TabNavigationProps {
-  activeTab: 'experience' | 'skills' | 'achievements';
-  onTabChange: (tab: 'experience' | 'skills' | 'achievements') => void;
+  activeTab: "experience" | "skills" | "achievements";
+  onTabChange: (tab: "experience" | "skills" | "achievements") => void;
 }
 
-const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange }) => {
+const TabNavigation: React.FC<TabNavigationProps> = ({
+  activeTab,
+  onTabChange,
+}) => {
   const tabs = [
-    { id: 'experience', label: 'Experience', icon: Building2 },
-    { id: 'skills', label: 'Skills', icon: Code },
-    { id: 'achievements', label: 'Achievements', icon: Trophy },
+    { id: "experience", label: "Experience", icon: Building2 },
+    { id: "skills", label: "Skills", icon: Code },
+    { id: "achievements", label: "Achievements", icon: Trophy },
   ] as const;
 
   return (
@@ -23,8 +26,8 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
               key={tab.id}
               className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
               }`}
               onClick={() => onTabChange(tab.id)}
             >

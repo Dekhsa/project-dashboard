@@ -4,8 +4,8 @@ class BlogPost {
     this.id = data.id || null;
     this.title = data.title;
     this.content = data.content;
-    this.excerpt = data.excerpt || '';
-    this.author = data.author || 'Admin';
+    this.excerpt = data.excerpt || "";
+    this.author = data.author || "Admin";
     this.tags = data.tags || [];
     this.published = data.published || false;
     this.createdAt = data.createdAt || new Date();
@@ -15,22 +15,22 @@ class BlogPost {
   // Validation methods
   validate() {
     const errors = [];
-    
+
     if (!this.title || this.title.length < 3) {
-      errors.push('Title must be at least 3 characters long');
+      errors.push("Title must be at least 3 characters long");
     }
-    
+
     if (!this.content || this.content.length < 10) {
-      errors.push('Content must be at least 10 characters long');
+      errors.push("Content must be at least 10 characters long");
     }
-    
+
     return errors;
   }
 
   // Generate excerpt if not provided
   generateExcerpt() {
     if (!this.excerpt && this.content) {
-      this.excerpt = this.content.substring(0, 150) + '...';
+      this.excerpt = this.content.substring(0, 150) + "...";
     }
   }
 
@@ -45,7 +45,7 @@ class BlogPost {
       tags: this.tags,
       published: this.published,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
     };
   }
 }

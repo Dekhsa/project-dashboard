@@ -1,98 +1,84 @@
-import React, { useState } from 'react';
-import Layout from '../components/Layout';
-import { Plus } from 'lucide-react';
-import { Project } from '../types';
-import { ProjectGrid, ProjectModal } from '../components/projects';
+import React, { useState, useEffect } from "react";
+import Layout from "../components/Layout";
+import { Plus } from "lucide-react";
+import { Project } from "../types";
+import { ProjectGrid, ProjectModal } from "../components/projects";
+import { projectAPI } from "../utils/api";
 
 const Projects: React.FC = () => {
-  const [projects, setProjects] = useState<Project[]>([
-    {
-      id: '1',
-      title: 'E-commerce Platform',
-      description: 'A full-featured e-commerce platform built with React and Node.js',
-      status: 'active',
-      createdAt: '2024-01-10',
-      updatedAt: '2024-01-15',
-      technologies: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-      progress: 75
-    },
-    {
-      id: '2',
-      title: 'Mobile App',
-      description: 'Cross-platform mobile application using React Native',
-      status: 'completed',
-      createdAt: '2023-12-01',
-      updatedAt: '2024-01-05',
-      technologies: ['React Native', 'Firebase', 'Redux'],
-      progress: 100
-    },
-    {
-      id: '3',
-      title: 'API Integration',
-      description: 'RESTful API integration for third-party services',
-      status: 'paused',
-      createdAt: '2024-01-08',
-      updatedAt: '2024-01-12',
-      technologies: ['Node.js', 'Express', 'PostgreSQL'],
-      progress: 40
-    }
-  ]);
-
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    status: 'active' as Project['status'],
-    technologies: '',
-    progress: 0
+    title: "",
+    description: "",
+    status: "active" as Project["status"],
+    technologies: "",
+    progress: 0,
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const fetchProjects = async () => {
+    try {
+      setLoading(true);
+      const response = await projectAPI.getAll();
+      setProjects(response.data || []);
+      setError(null);
+    } catch (err) {
+      setError("Failed to load projects");
+      console.error("Error fetching projects:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    const techArray = formData.technologies.split(',').map(tech => tech.trim()).filter(tech => tech);
-    
-    if (editingProject) {
-      // Update existing project
-      setProjects(projects.map(p => 
-        p.id === editingProject.id 
-          ? {
-              ...p,
-              title: formData.title,
-              description: formData.description,
-              status: formData.status,
-              technologies: techArray,
-              progress: formData.progress,
-              updatedAt: new Date().toISOString().split('T')[0]
-            }
-          : p
-      ));
-    } else {
-      // Create new project
-      const newProject: Project = {
-        id: Date.now().toString(),
+
+    try {
+      const techArray = formData.technologies
+        .split(",")
+        .map((tech) => tech.trim())
+        .filter((tech) => tech);
+
+      const projectData = {
         title: formData.title,
         description: formData.description,
         status: formData.status,
         technologies: techArray,
         progress: formData.progress,
-        createdAt: new Date().toISOString().split('T')[0],
-        updatedAt: new Date().toISOString().split('T')[0]
       };
-      setProjects([...projects, newProject]);
+
+      if (editingProject) {
+        // Update existing project
+        await projectAPI.update(editingProject.id, projectData);
+        await fetchProjects(); // Refresh the list
+      } else {
+        // Create new project
+        await projectAPI.create(projectData);
+        await fetchProjects(); // Refresh the list
+      }
+
+      resetForm();
+      setError(null);
+    } catch (err) {
+      setError("Failed to save project");
+      console.error("Error saving project:", err);
     }
-    
-    resetForm();
   };
 
   const resetForm = () => {
     setFormData({
-      title: '',
-      description: '',
-      status: 'active',
-      technologies: '',
-      progress: 0
+      title: "",
+      description: "",
+      status: "active",
+      technologies: "",
+      progress: 0,
     });
     setEditingProject(null);
     setShowModal(false);
@@ -104,15 +90,22 @@ const Projects: React.FC = () => {
       title: project.title,
       description: project.description,
       status: project.status,
-      technologies: project.technologies.join(', '),
-      progress: project.progress
+      technologies: project.technologies.join(", "),
+      progress: project.progress,
     });
     setShowModal(true);
   };
 
-  const handleDelete = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this project?')) {
-      setProjects(projects.filter(project => project.id !== id));
+  const handleDelete = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete this project?")) {
+      try {
+        await projectAPI.delete(id);
+        await fetchProjects(); // Refresh the list
+        setError(null);
+      } catch (err) {
+        setError("Failed to delete project");
+        console.error("Error deleting project:", err);
+      }
     }
   };
 
@@ -123,7 +116,9 @@ const Projects: React.FC = () => {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Projects</h1>
-            <p className="text-gray-600">Manage your projects and track their progress</p>
+            <p className="text-gray-600">
+              Manage your projects and track their progress
+            </p>
           </div>
           <button
             onClick={() => setShowModal(true)}
@@ -134,22 +129,39 @@ const Projects: React.FC = () => {
           </button>
         </div>
 
-        {/* Projects Grid */}
-        <ProjectGrid 
-          projects={projects}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+            {error}
+          </div>
+        )}
 
-        {/* Modal */}
-        <ProjectModal
-          isOpen={showModal}
-          onClose={resetForm}
-          onSubmit={handleSubmit}
-          formData={formData}
-          setFormData={setFormData}
-          editingProject={editingProject}
-        />
+        {/* Loading State */}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <span className="ml-3 text-gray-600">Loading projects...</span>
+          </div>
+        ) : (
+          <>
+            {/* Projects Grid */}
+            <ProjectGrid
+              projects={projects}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+
+            {/* Modal */}
+            <ProjectModal
+              isOpen={showModal}
+              onClose={resetForm}
+              onSubmit={handleSubmit}
+              formData={formData}
+              setFormData={setFormData}
+              editingProject={editingProject}
+            />
+          </>
+        )}
       </div>
     </Layout>
   );

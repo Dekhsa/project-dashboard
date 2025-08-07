@@ -2,14 +2,14 @@ export interface User {
   id: string;
   username: string;
   email: string;
-  role: 'admin' | 'user';
+  role: "admin" | "user";
 }
 
 export interface Project {
   id: string;
   title: string;
   description: string;
-  status: 'active' | 'completed' | 'paused';
+  status: "active" | "completed" | "paused";
   createdAt: string;
   updatedAt: string;
   technologies: string[];
@@ -47,14 +47,14 @@ export interface Experience {
   current: boolean;
   description: string;
   technologies: string[];
-  type: 'work' | 'internship' | 'freelance';
+  type: "work" | "internship" | "freelance";
 }
 
 export interface Skill {
   id: string;
   name: string;
-  category: 'frontend' | 'backend' | 'database' | 'tools' | 'soft-skills';
-  level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  category: "frontend" | "backend" | "database" | "tools" | "soft-skills";
+  level: "beginner" | "intermediate" | "advanced" | "expert";
   yearsOfExperience: number;
   description?: string;
 }
@@ -64,7 +64,7 @@ export interface Achievement {
   title: string;
   description: string;
   date: string;
-  category: 'certification' | 'award' | 'project' | 'recognition' | 'education';
+  category: "certification" | "award" | "project" | "recognition" | "education";
   issuer?: string;
   credentialId?: string;
   credentialUrl?: string;
