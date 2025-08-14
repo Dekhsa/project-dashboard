@@ -43,7 +43,7 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-2">
             <h3 className="text-lg font-semibold text-gray-900">
-              {achievement.title}
+              {achievement.title || "Untitled Achievement"}
             </h3>
             {achievement.featured && (
               <Star className="w-5 h-5 text-yellow-500 fill-current" />
@@ -59,22 +59,25 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
             )}
             <Calendar className="w-4 h-4 mr-1" />
             <span>
-              {new Date(achievement.date).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-              })}
+              {achievement.date 
+                ? new Date(achievement.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                  })
+                : "Unknown date"
+              }
             </span>
           </div>
 
-          <p className="text-gray-700 mb-3">{achievement.description}</p>
+          <p className="text-gray-700 mb-3">{achievement.description || "No description available"}</p>
 
           <div className="flex items-center space-x-4 mb-3">
             <span
               className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCategoryColor(
-                achievement.category
+                achievement.category || "recognition"
               )}`}
             >
-              {achievement.category}
+              {achievement.category || "recognition"}
             </span>
 
             {achievement.credentialId && (

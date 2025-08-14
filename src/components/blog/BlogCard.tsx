@@ -29,7 +29,7 @@ const BlogCard: React.FC<BlogCardProps> = ({
     <div className="bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow">
       <div className="flex justify-between items-start mb-3">
         <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
-          {post.title}
+          {post.title || "Untitled Post"}
         </h3>
         <span
           className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
@@ -40,7 +40,9 @@ const BlogCard: React.FC<BlogCardProps> = ({
         </span>
       </div>
 
-      <p className="text-gray-600 text-sm mb-4 line-clamp-3">{post.excerpt}</p>
+      <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+        {post.excerpt || "No excerpt available"}
+      </p>
 
       {/* Tags */}
       <div className="mb-4">
@@ -49,17 +51,25 @@ const BlogCard: React.FC<BlogCardProps> = ({
           <span className="text-xs text-gray-500">Tags</span>
         </div>
         <div className="flex flex-wrap gap-1">
-          {post.tags.slice(0, 3).map((tag, index) => (
-            <span
-              key={index}
-              className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-            >
-              {tag}
-            </span>
-          ))}
-          {post.tags.length > 3 && (
+          {post.tags && Array.isArray(post.tags) && post.tags.length > 0 ? (
+            <>
+              {post.tags.slice(0, 3).map((tag, index) => (
+                <span
+                  key={index}
+                  className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                >
+                  {tag}
+                </span>
+              ))}
+              {post.tags.length > 3 && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                  +{post.tags.length - 3} more
+                </span>
+              )}
+            </>
+          ) : (
             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-              +{post.tags.length - 3} more
+              No tags
             </span>
           )}
         </div>
@@ -69,9 +79,14 @@ const BlogCard: React.FC<BlogCardProps> = ({
       <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
         <div className="flex items-center space-x-1">
           <Calendar className="w-3 h-3" />
-          <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+          <span>
+            {post.createdAt 
+              ? new Date(post.createdAt).toLocaleDateString()
+              : "Unknown date"
+            }
+          </span>
         </div>
-        <span>By {post.author}</span>
+        <span>By {post.author || "Unknown Author"}</span>
       </div>
 
       {/* Actions */}

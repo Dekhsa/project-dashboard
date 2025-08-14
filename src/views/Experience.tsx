@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
+import { Plus } from "lucide-react";
 import { Experience, Skill, Achievement } from "../types";
 import {
   TabNavigation,
   ExperienceCard,
   SkillCard,
   AchievementCard,
+  ExperienceModal,
+  SkillModal,
+  AchievementModal,
 } from "../components/experience";
 import { experienceAPI, skillsAPI, achievementsAPI } from "../utils/api";
 
@@ -14,7 +18,6 @@ const ExperienceSkills: React.FC = () => {
   const [activeTab, setActiveTab] = useState<
     "experience" | "skills" | "achievements"
   >("experience");
-
   // State for experiences
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [experienceLoading, setExperienceLoading] = useState(true);
@@ -31,6 +34,49 @@ const ExperienceSkills: React.FC = () => {
   const [achievementsError, setAchievementsError] = useState<string | null>(
     null
   );
+
+  // Modal states
+  const [showExperienceModal, setShowExperienceModal] = useState(false);
+  const [showSkillModal, setShowSkillModal] = useState(false);
+  const [showAchievementModal, setShowAchievementModal] = useState(false);
+
+  // Editing states
+  const [editingExperience, setEditingExperience] = useState<Experience | null>(null);
+  const [editingSkill, setEditingSkill] = useState<Skill | null>(null);
+  const [editingAchievement, setEditingAchievement] = useState<Achievement | null>(null);
+
+  // Form data states
+  const [experienceFormData, setExperienceFormData] = useState({
+    company: "",
+    position: "",
+    location: "",
+    startDate: "",
+    endDate: "",
+    current: false,
+    description: "",
+    technologies: "",
+    type: "work" as "work" | "internship" | "freelance",
+  });
+
+  const [skillFormData, setSkillFormData] = useState({
+    name: "",
+    category: "frontend" as "frontend" | "backend" | "database" | "tools" | "soft-skills",
+    level: "beginner" as "beginner" | "intermediate" | "advanced" | "expert",
+    yearsOfExperience: 0,
+    description: "",
+  });
+
+  const [achievementFormData, setAchievementFormData] = useState({
+    title: "",
+    description: "",
+    date: "",
+    category: "certification" as "certification" | "award" | "project" | "recognition" | "education",
+    issuer: "",
+    credentialId: "",
+    credentialUrl: "",
+    skills: "",
+    featured: false,
+  });
 
   useEffect(() => {
     fetchExperiences();
@@ -94,44 +140,197 @@ const ExperienceSkills: React.FC = () => {
     }
   };
 
-  // Wrapper functions for edit handlers to match component expectations
+  // Form reset functions
+  const resetExperienceForm = () => {
+    setExperienceFormData({
+      company: "",
+      position: "",
+      location: "",
+      startDate: "",
+      endDate: "",
+      current: false,
+      description: "",
+      technologies: "",
+      type: "work",
+    });
+    setEditingExperience(null);
+    setShowExperienceModal(false);
+  };
+
+  const resetSkillForm = () => {
+    setSkillFormData({
+      name: "",
+      category: "frontend",
+      level: "beginner",
+      yearsOfExperience: 0,
+      description: "",
+    });
+    setEditingSkill(null);
+    setShowSkillModal(false);
+  };
+
+  const resetAchievementForm = () => {
+    setAchievementFormData({
+      title: "",
+      description: "",
+      date: "",
+      category: "certification",
+      issuer: "",
+      credentialId: "",
+      credentialUrl: "",
+      skills: "",
+      featured: false,
+    });
+    setEditingAchievement(null);
+    setShowAchievementModal(false);
+  };
+
+  // Edit handlers
   const handleEditExperience = (experience: Experience) => {
-    // This will need to be implemented with a modal or form
-    console.log("Edit experience:", experience);
-    // For now, just pass the full object as update data
-    handleUpdateExperience(experience.id, experience);
+    setEditingExperience(experience);
+    setExperienceFormData({
+      company: experience.company,
+      position: experience.position,
+      location: experience.location,
+      startDate: experience.startDate,
+      endDate: experience.endDate || "",
+      current: experience.current,
+      description: experience.description,
+      technologies: experience.technologies.join(", "),
+      type: experience.type,
+    });
+    setShowExperienceModal(true);
   };
 
   const handleEditSkill = (skill: Skill) => {
-    // This will need to be implemented with a modal or form
-    console.log("Edit skill:", skill);
-    // For now, just pass the full object as update data
-    handleUpdateSkill(skill.id, skill);
+    setEditingSkill(skill);
+    setSkillFormData({
+      name: skill.name,
+      category: skill.category,
+      level: skill.level,
+      yearsOfExperience: skill.yearsOfExperience,
+      description: skill.description || "",
+    });
+    setShowSkillModal(true);
   };
 
   const handleEditAchievement = (achievement: Achievement) => {
-    // This will need to be implemented with a modal or form
-    console.log("Edit achievement:", achievement);
-    // For now, just pass the full object as update data
-    handleUpdateAchievement(achievement.id, achievement);
+    setEditingAchievement(achievement);
+    setAchievementFormData({
+      title: achievement.title,
+      description: achievement.description,
+      date: achievement.date,
+      category: achievement.category,
+      issuer: achievement.issuer || "",
+      credentialId: achievement.credentialId || "",
+      credentialUrl: achievement.credentialUrl || "",
+      skills: achievement.skills?.join(", ") || "",
+      featured: achievement.featured,
+    });
+    setShowAchievementModal(true);
   };
 
-  // CRUD handlers for experiences
-
-  const handleUpdateExperience = async (
-    id: string,
-    data: Partial<Experience>
-  ) => {
+  // Create/Update handlers
+  const handleExperienceSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
     try {
-      await experienceAPI.update(id, data);
+      const techArray = experienceFormData.technologies
+        .split(",")
+        .map((tech) => tech.trim())
+        .filter((tech) => tech);
+
+      const experienceData = {
+        company: experienceFormData.company,
+        position: experienceFormData.position,
+        location: experienceFormData.location,
+        startDate: experienceFormData.startDate,
+        endDate: experienceFormData.current ? undefined : experienceFormData.endDate,
+        current: experienceFormData.current,
+        description: experienceFormData.description,
+        technologies: techArray,
+        type: experienceFormData.type,
+      };
+
+      if (editingExperience) {
+        await experienceAPI.update(editingExperience.id, experienceData);
+      } else {
+        await experienceAPI.create(experienceData);
+      }
+
       await fetchExperiences();
+      resetExperienceForm();
       setExperienceError(null);
     } catch (err) {
-      setExperienceError("Failed to update experience");
-      console.error("Error updating experience:", err);
+      setExperienceError("Failed to save experience");
+      console.error("Error saving experience:", err);
     }
   };
 
+  const handleSkillSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      const skillData = {
+        name: skillFormData.name,
+        category: skillFormData.category,
+        level: skillFormData.level,
+        yearsOfExperience: skillFormData.yearsOfExperience,
+        description: skillFormData.description,
+      };
+
+      if (editingSkill) {
+        await skillsAPI.update(editingSkill.id, skillData);
+      } else {
+        await skillsAPI.create(skillData);
+      }
+
+      await fetchSkills();
+      resetSkillForm();
+      setSkillsError(null);
+    } catch (err) {
+      setSkillsError("Failed to save skill");
+      console.error("Error saving skill:", err);
+    }
+  };
+
+  const handleAchievementSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      const skillsArray = achievementFormData.skills
+        .split(",")
+        .map((skill) => skill.trim())
+        .filter((skill) => skill);
+
+      const achievementData = {
+        title: achievementFormData.title,
+        description: achievementFormData.description,
+        date: achievementFormData.date,
+        category: achievementFormData.category,
+        issuer: achievementFormData.issuer || undefined,
+        credentialId: achievementFormData.credentialId || undefined,
+        credentialUrl: achievementFormData.credentialUrl || undefined,
+        skills: skillsArray.length > 0 ? skillsArray : undefined,
+        featured: achievementFormData.featured,
+      };
+
+      if (editingAchievement) {
+        await achievementsAPI.update(editingAchievement.id, achievementData);
+      } else {
+        await achievementsAPI.create(achievementData);
+      }
+
+      await fetchAchievements();
+      resetAchievementForm();
+      setAchievementsError(null);
+    } catch (err) {
+      setAchievementsError("Failed to save achievement");
+      console.error("Error saving achievement:", err);
+    }
+  };
+
+  // Delete handlers
   const handleDeleteExperience = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this experience?")) {
       try {
@@ -145,19 +344,6 @@ const ExperienceSkills: React.FC = () => {
     }
   };
 
-  // CRUD handlers for skills
-
-  const handleUpdateSkill = async (id: string, data: Partial<Skill>) => {
-    try {
-      await skillsAPI.update(id, data);
-      await fetchSkills();
-      setSkillsError(null);
-    } catch (err) {
-      setSkillsError("Failed to update skill");
-      console.error("Error updating skill:", err);
-    }
-  };
-
   const handleDeleteSkill = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this skill?")) {
       try {
@@ -168,22 +354,6 @@ const ExperienceSkills: React.FC = () => {
         setSkillsError("Failed to delete skill");
         console.error("Error deleting skill:", err);
       }
-    }
-  };
-
-  // CRUD handlers for achievements
-
-  const handleUpdateAchievement = async (
-    id: string,
-    data: Partial<Achievement>
-  ) => {
-    try {
-      await achievementsAPI.update(id, data);
-      await fetchAchievements();
-      setAchievementsError(null);
-    } catch (err) {
-      setAchievementsError("Failed to update achievement");
-      console.error("Error updating achievement:", err);
     }
   };
 
@@ -295,6 +465,33 @@ const ExperienceSkills: React.FC = () => {
     }
   };
 
+  const getAddButtonText = () => {
+    switch (activeTab) {
+      case "experience":
+        return "New Experience";
+      case "skills":
+        return "New Skill";
+      case "achievements":
+        return "New Achievement";
+      default:
+        return "Add New";
+    }
+  };
+
+  const handleAddClick = () => {
+    switch (activeTab) {
+      case "experience":
+        setShowExperienceModal(true);
+        break;
+      case "skills":
+        setShowSkillModal(true);
+        break;
+      case "achievements":
+        setShowAchievementModal(true);
+        break;
+    }
+  };
+
   return (
     <Layout>
       <div className="space-y-6">
@@ -308,6 +505,13 @@ const ExperienceSkills: React.FC = () => {
               Manage your professional experience, skills, and achievements
             </p>
           </div>
+          <button
+            onClick={handleAddClick}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center space-x-2"
+          >
+            <Plus className="w-4 h-4" />
+            <span>{getAddButtonText()}</span>
+          </button>
         </div>
 
         {/* Tab Navigation */}
@@ -315,6 +519,34 @@ const ExperienceSkills: React.FC = () => {
 
         {/* Tab Content */}
         {renderTabContent()}
+
+        {/* Modals */}
+        <ExperienceModal
+          isOpen={showExperienceModal}
+          onClose={resetExperienceForm}
+          onSubmit={handleExperienceSubmit}
+          formData={experienceFormData}
+          setFormData={setExperienceFormData}
+          editingItem={editingExperience}
+        />
+
+        <SkillModal
+          isOpen={showSkillModal}
+          onClose={resetSkillForm}
+          onSubmit={handleSkillSubmit}
+          formData={skillFormData}
+          setFormData={setSkillFormData}
+          editingItem={editingSkill}
+        />
+
+        <AchievementModal
+          isOpen={showAchievementModal}
+          onClose={resetAchievementForm}
+          onSubmit={handleAchievementSubmit}
+          formData={achievementFormData}
+          setFormData={setAchievementFormData}
+          editingItem={editingAchievement}
+        />
       </div>
     </Layout>
   );

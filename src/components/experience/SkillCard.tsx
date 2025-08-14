@@ -67,7 +67,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill, onEdit, onDelete }) => {
   return (
     <div className="bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow">
       <div className="flex justify-between items-start mb-3">
-        <h3 className="text-lg font-semibold text-gray-900">{skill.name}</h3>
+        <h3 className="text-lg font-semibold text-gray-900">{skill.name || "Unnamed Skill"}</h3>
         <div className="flex space-x-1">
           <button
             onClick={() => onEdit(skill)}
@@ -90,25 +90,25 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill, onEdit, onDelete }) => {
         <div className="flex justify-between items-center">
           <span
             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCategoryColor(
-              skill.category
+              skill.category || "tools"
             )}`}
           >
-            {skill.category.replace("-", " ")}
+            {(skill.category || "tools").replace("-", " ")}
           </span>
-          {renderStars(skill.level)}
+          {renderStars(skill.level || "beginner")}
         </div>
 
         <div className="flex justify-between items-center">
           <span
             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getLevelColor(
-              skill.level
+              skill.level || "beginner"
             )}`}
           >
-            {skill.level}
+            {skill.level || "beginner"}
           </span>
           <span className="text-sm text-gray-500">
-            {skill.yearsOfExperience} year
-            {skill.yearsOfExperience !== 1 ? "s" : ""}
+            {skill.yearsOfExperience || 0} year
+            {(skill.yearsOfExperience || 0) !== 1 ? "s" : ""}
           </span>
         </div>
 

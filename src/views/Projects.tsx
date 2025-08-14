@@ -27,11 +27,25 @@ const Projects: React.FC = () => {
     try {
       setLoading(true);
       const response = await projectAPI.getAll();
-      setProjects(response.data || []);
+      // Ensure we have valid project data with defensive defaults
+      const projectsData = Array.isArray(response.data) ? response.data : [];
+      const sanitizedProjects = projectsData.map((project: any) => ({
+        id: project.id || '',
+        title: project.title || 'Untitled Project',
+        description: project.description || '',
+        status: project.status || 'active',
+        createdAt: project.createdAt || new Date().toISOString(),
+        updatedAt: project.updatedAt || new Date().toISOString(),
+        technologies: Array.isArray(project.technologies) ? project.technologies : [],
+        progress: typeof project.progress === 'number' ? project.progress : 0,
+      }));
+      setProjects(sanitizedProjects);
       setError(null);
     } catch (err) {
       setError("Failed to load projects");
       console.error("Error fetching projects:", err);
+      // Set empty array on error to prevent filter issues
+      setProjects([]);
     } finally {
       setLoading(false);
     }
@@ -87,11 +101,13 @@ const Projects: React.FC = () => {
   const handleEdit = (project: Project) => {
     setEditingProject(project);
     setFormData({
-      title: project.title,
-      description: project.description,
-      status: project.status,
-      technologies: project.technologies.join(", "),
-      progress: project.progress,
+      title: project.title || "",
+      description: project.description || "",
+      status: project.status || "active",
+      technologies: Array.isArray(project.technologies) 
+        ? project.technologies.join(", ") 
+        : "",
+      progress: project.progress || 0,
     });
     setShowModal(true);
   };

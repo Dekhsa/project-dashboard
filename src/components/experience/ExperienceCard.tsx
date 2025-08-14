@@ -32,19 +32,19 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-2">
             <h3 className="text-lg font-semibold text-gray-900">
-              {experience.position}
+              {experience.position || "Unknown Position"}
             </h3>
             <span
               className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTypeColor(
                 experience.type
               )}`}
             >
-              {experience.type}
+              {experience.type || "unknown"}
             </span>
           </div>
           <div className="flex items-center text-gray-600 mb-2">
             <Building2 className="w-4 h-4 mr-1" />
-            <span className="font-medium">{experience.company}</span>
+            <span className="font-medium">{experience.company || "Unknown Company"}</span>
             {experience.location && (
               <>
                 <MapPin className="w-4 h-4 ml-4 mr-1" />
@@ -59,16 +59,22 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({
               {experience.current ? "Present" : experience.endDate}
             </span>
           </div>
-          <p className="text-gray-700 mb-3">{experience.description}</p>
+          <p className="text-gray-700 mb-3">{experience.description || "No description available"}</p>
           <div className="flex flex-wrap gap-2">
-            {experience.technologies.map((tech, index) => (
-              <span
-                key={index}
-                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
-              >
-                {tech}
+            {experience.technologies && Array.isArray(experience.technologies) && experience.technologies.length > 0 ? (
+              experience.technologies.map((tech, index) => (
+                <span
+                  key={index}
+                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
+                >
+                  {tech}
+                </span>
+              ))
+            ) : (
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                No technologies specified
               </span>
-            ))}
+            )}
           </div>
         </div>
         <div className="flex space-x-2 ml-4">

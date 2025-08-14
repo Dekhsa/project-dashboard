@@ -31,7 +31,19 @@ const Blog: React.FC = () => {
       const response = await blogAPI.getAll();
       // Defensive array check to prevent filter errors
       const postsData = Array.isArray(response.data) ? response.data : [];
-      setPosts(postsData);
+      // Sanitize posts data to ensure all required properties exist
+      const sanitizedPosts = postsData.map((post: any) => ({
+        id: post.id || '',
+        title: post.title || 'Untitled Post',
+        content: post.content || '',
+        excerpt: post.excerpt || '',
+        author: post.author || 'Unknown Author',
+        createdAt: post.createdAt || new Date().toISOString(),
+        updatedAt: post.updatedAt || new Date().toISOString(),
+        tags: Array.isArray(post.tags) ? post.tags : [],
+        published: typeof post.published === 'boolean' ? post.published : false,
+      }));
+      setPosts(sanitizedPosts);
       setError(null);
     } catch (err) {
       setError("Failed to load blog posts");
@@ -95,12 +107,12 @@ const Blog: React.FC = () => {
   const handleEdit = (post: BlogPost) => {
     setEditingPost(post);
     setFormData({
-      title: post.title,
-      content: post.content,
-      excerpt: post.excerpt,
-      author: post.author,
-      tags: post.tags.join(", "),
-      published: post.published,
+      title: post.title || "",
+      content: post.content || "",
+      excerpt: post.excerpt || "",
+      author: post.author || "Admin",
+      tags: Array.isArray(post.tags) ? post.tags.join(", ") : "",
+      published: post.published || false,
     });
     setShowModal(true);
   };
